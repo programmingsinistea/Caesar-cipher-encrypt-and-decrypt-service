@@ -3,6 +3,7 @@ import random
 import datetime
 
 record = []
+#try to access the file
 try:
     with open("vocab.txt", "r") as f:
         vocab = f.read().splitlines()
@@ -26,7 +27,7 @@ except FileNotFoundError:
         sys.exit()
 
 
-
+#provide guide
 print("Caesar cipher encrypt and decrypt service\ntype '/help' for help")
 
 def checkHist(arr):
@@ -43,10 +44,10 @@ def checkVocab(s):
                 return True
     return False
 
-def isSmall(k):
+def isSmall(k):# k is ARCLL of the string
     return 97 <= k <= 122
 
-def isLetter(k):
+def isLetter(k): # k is ARCLL of the string
     return 65 <= k <= 90 or isSmall(k)
 
 def outputProcess(s, type):
@@ -91,7 +92,7 @@ def findDiff(s):
 def decrypt(s, k):
     output = ""
     for char in s:
-        intChar = ord(char)
+        intChar = ord(char) # return ARCLL of 'char'
         if isLetter(intChar):
             if (intChar - k < 97 and isSmall(intChar)) or (intChar - k < 65 and not isSmall(intChar)):
                 newAscii = intChar - k + 26
@@ -106,20 +107,16 @@ def decrypt(s, k):
         return output
     return decrypt(output, 1)
 
-while True:
-    command = input("Command: ")
-    commandList = command.split(" ")
-    if commandList[0] == "/quit":
-        sys.exit()
+while True: #main loop of the program
+    command = input("Command: ") # ask for command 
+    commandList = command.split(" ") #split the command in half 
+    if commandList[0] == "/quit":#identify the command
+        sys.exit() # use system command to quit the program
     elif command == "/help":
-        print("/decrypt <operation type(1 / 2)> <file name> - decrypt the text")
-        print("/encrypt <operation type(1 / 2)> <file name> - encrypt the text")
-        print("/quit - exiting this application")
-        print("/hist - check the operation history in this session")
-        print("type 1 - input by the file that you provide and output the text to 'result.txt'")
-        print("type 2 - input and output text through terminal")
+        print("/decrypt <operation type(1 / 2)> <file name> - decrypt the text \n /encrypt <operation type(1 / 2)> <file name> - encrypt the text \n /quit - exiting this application \n /hist - check the operation history in this session \n type 1 - input by the file that you provide and output the text to 'result.txt \n type 2 - input and output text through terminal") # print the instruction
+
     elif commandList[0] == "/hist":
-        checkHist(record)
+        checkHist(record) #print h=user history
     elif len(commandList) > 1:
         contentBool = True
         if commandList[1] == "1":
