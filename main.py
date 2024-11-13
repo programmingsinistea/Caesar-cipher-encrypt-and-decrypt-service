@@ -15,18 +15,6 @@ except FileNotFoundError:
     else:
         sys.exit()
 
-try:
-    with open("bannedVocab.txt","r") as s:
-        bannedVocab = s.read().splitlines()
-except FileNotFoundError:
-    print("bannedVocab.txt file not found. \n run without it?\n")
-    temp = input("T / F: ")
-    if temp == "T":
-        print(":)")
-    else:
-        sys.exit()
-
-
 #provide guide
 print("Caesar cipher encrypt and decrypt service\ntype '/help' for help")
 
@@ -35,7 +23,7 @@ def checkHist(arr):
         print(f"Record {i + 1}:\nTime: {rec[1]}\nOperation Type: {rec[0]}\nInput: {rec[2]}\nOutput: {rec[3]}")
 
 def checkVocab(s):
-    outputVocab = s.lower().split()
+    outputVocab = s.lower().split()# turn the vocab into small letter than
     cnt = 0
     for word in outputVocab:
         if word in vocab:
@@ -50,21 +38,21 @@ def isSmall(k):# k is ARCLL of the string
 def isLetter(k): # k is ARCLL of the string
     return 65 <= k <= 90 or isSmall(k)
 
-def outputProcess(s, type):
+def outputProcess(s, type):#output the result
     if type == 1:
         try:
-            with open("result.txt", "w", encoding="Latin-1") as g:
-                g.write(s)
-            print("Done!")
+            with open("result.txt", "w", encoding="Latin-1") as g:#open the result file
+                g.write(s) #write the result into the result.txt
+            print("Done!")#the the user the output process has been complete
         except IOError:
             print("Error writing to result.txt")
     else:
         print("Output: " + s)
 
 def encrypt(s):
-    k = random.randint(1, 25)
-    output = ""
-    for char in s:
+    k = random.randint(1, 25)#generate the shift 
+    output = "" # create a output string
+    for char in s: 
         intChar = ord(char)
         if isLetter(intChar):
             if (intChar + k > 122 and isSmall(intChar)) or (intChar + k > 90 and not isSmall(intChar)):
@@ -94,7 +82,7 @@ def decrypt(s, k):
     for char in s:
         intChar = ord(char) # return ARCLL of 'char'
         if isLetter(intChar):
-            if (intChar - k < 97 and isSmall(intChar)) or (intChar - k < 65 and not isSmall(intChar)):
+            if (intChar - k < 97 and isSmall(intChar)) or (intChar - k < 65 and not isSmall(intChar)): # prevent runtime error (out of range)
                 newAscii = intChar - k + 26
             else:
                 newAscii = intChar - k
@@ -108,32 +96,32 @@ def decrypt(s, k):
     return decrypt(output, 1)
 
 while True: #main loop of the program
-    command = input("Command: ") # ask for command 
-    commandList = command.split(" ") #split the command in half 
-    if commandList[0] == "/quit":#identify the command
+    command = input("Command: ") # ask for commands
+    commandList = command.split(" ") #split the commands in half  (name + number)
+    if commandList[0] == "/quit":#identify the name
         sys.exit() # use system command to quit the program
-    elif command == "/help":
+    elif command == "/help":#identify the name
         print("/decrypt <operation type(1 / 2)> <file name> - decrypt the text \n /encrypt <operation type(1 / 2)> <file name> - encrypt the text \n /quit - exiting this application \n /hist - check the operation history in this session \n type 1 - input by the file that you provide and output the text to 'result.txt \n type 2 - input and output text through terminal") # print the instruction
 
-    elif commandList[0] == "/hist":
+    elif commandList[0] == "/hist":#identify the name
         checkHist(record) #print h=user history
-    elif len(commandList) > 1:
-        contentBool = True
-        if commandList[1] == "1":
-            try:
+    elif len(commandList) > 1:# if number is include in the command 
+        contentBool = True#define content bool (if the file exits or not) and default as True (will be change)
+        if commandList[1] == "1": #identify the number
+            try:#check if the file user mentioned exits or not
                 with open(commandList[2], "r", encoding="Latin-1") as f:
                     content = f.read()
-            except FileNotFoundError:
+            except FileNotFoundError:#if not exits:
                 print("File not exist")
-                contentBool = False
+                contentBool = False #set contentBool False
         if contentBool:
-            if commandList[0] == "/decrypt":
-                if commandList[1] == "2":
-                    content = input("Input the text you want to decrypt: ")
+            if commandList[0] == "/decrypt":#identify the name
+                if commandList[1] == "2":#identify the number
+                    content = input("Input the text you want to decrypt: ") #receive the string user want to decrypt
                 output = decrypt(content, findDiff(content))
-            elif commandList[0] == "/encrypt":
-                if commandList[1] == "2":
-                    content = input("Input the text you want to encrypt: ")
+            elif commandList[0] == "/encrypt":#identify the name 
+                if commandList[1] == "2":#identify the number
+                    content = input("Input the text you want to encrypt: ")#receive the string user want to encrypt
                 output = encrypt(content)
             outputProcess(output, int(commandList[1]))
     else:
